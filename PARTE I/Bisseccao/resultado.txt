@@ -1,0 +1,6 @@
+================ PROBLEMA 3.6 ====================
+
+Intervalo: [5.0, 6.0]
+A raiz encontrada é: 5.62273161257179
+Valor da função aplicada à raíz é: 0.0189200414390717
+Número de iterações necessário: 15
