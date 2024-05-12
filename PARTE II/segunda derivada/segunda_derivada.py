@@ -1,25 +1,42 @@
-import sympy as simp
+# Implementação do método da Derivada de Segunda Ordem
 
-# Leitura da função a partir do arquivo input.txt
-Dados_do_arquivo = []
-with open('input.txt', 'r') as file:
-    for line in file:
-        Dados_do_arquivo.append(line.strip())
+from math import *
 
-# Separa a função
-funcao = simp.sympify(Dados_do_arquivo[0])
+# Abre o arquivo de entrada para leitura e o arquivo de saída para escrita
+arquivoLer = open('input.txt', 'r')
+arquivoResultado = open('output.txt', 'w')
 
-# Valor do ponto onde a segunda derivada será calculada
-x_i = 2.0  # Substitua pelo ponto desejado
+# Função para ler os dados do arquivo de entrada
+def lerArquivo():
+    global arquivoLer, funcao, x
 
-# Valor do incremento h (pode ser ajustado)
-h = 1e-5
+    # Lê a função e o valor de x do arquivo
+    funcao = arquivoLer.readline()
+    x = float(arquivoLer.readline())
+ 
+# Função para avaliar a função fornecida em um ponto específico
+def func(x):
+    global funcao
+    return eval(funcao)
 
-# Cálculo da segunda derivada usando a fórmula de diferença progressiva (forward difference)
-segunda_derivada = (funcao.subs({"x": x_i + 2 * h}) - 2 * funcao.subs({"x": x_i + h}) + funcao.subs({"x": x_i})) / (h**2)
+# Função para calcular a derivada de segunda ordem
+def derivadaSegunda(x):
+    # Aplica a fórmula da derivada de segunda ordem
+    return str((func(x + 1) - func(x)) - (func(x) - func(x - 1)))
 
-print(f"A segunda derivada em x = {x_i} é aproximadamente: {segunda_derivada}")
+# Função principal
+def main():
+    global arquivoResultado, x
 
-with open('output.txt', 'w') as arquivo_saida:
-    arquivo_saida.write(f'Segunda Derivada Aproximada:\n')
-    arquivo_saida.write(f'Segunda derivada em x = {x_i} sera aproximadamente: {segunda_derivada}\n')
+    # Chama a função para ler os dados do arquivo de entrada
+    lerArquivo()
+
+    # Escreve a derivada de segunda ordem no arquivo de saída
+    arquivoResultado.write("f''(x) = " + derivadaSegunda(x))
+    
+    # Fecha os arquivos
+    arquivoLer.close()	
+    arquivoResultado.close()
+
+# Chama a função principal
+main()

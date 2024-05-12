@@ -1,27 +1,40 @@
-#bibliotecas utilizadas
-import sympy as simp
-import math
+from sympy import *
 
-#criação da lista que recebera os dados do arquivo
-Dados_do_arquivo = []
+# Define a variável simbólica x
+x = symbols('x')
 
-#leitura do arquivo e separação das linhas em indices da lista
-with open('input.txt', 'r') as file:
-    for line in file:
-        Dados_do_arquivo.append(line.strip())  
+# Abre o arquivo de entrada para leitura e o arquivo de saída para escrita
+arquivo_entrada = open('input.txt', 'r')
+arquivo_saida = open('output.txt', 'w')
 
-#separamento dos dados em variaveis com nomes mais significativos
-a = float(Dados_do_arquivo[0])
-b = float(Dados_do_arquivo[1])
+# Função para ler os dados do arquivo de entrada
+def ler_arquivo():
+    global arquivo_entrada, funcao, limite_inferior, limite_superior
+    
+    # Lê a função e os limites de integração do arquivo
+    funcao = eval(arquivo_entrada.readline())
+    limite_inferior = float(arquivo_entrada.readline())
+    limite_superior = float(arquivo_entrada.readline())
 
-#declaração da função
-def f(x):
-    return simp.sympify(Dados_do_arquivo[2]).subs({"x": x}).evalf()
+# Função para calcular a integração pelo método do trapézio simples
+def trapezio_simples(limite_inferior, limite_superior, funcao):
+    # Aplica a fórmula do trapézio simples
+    integral = (limite_superior - limite_inferior) * ((funcao.subs(x, limite_inferior) + funcao.subs(x, limite_superior)) / 2)
+    return integral
 
-h = a-b
+# Função principal
+def main():
+    global arquivo_saida, funcao, limite_inferior, limite_superior
 
-I = (h/2)*(f(a)+f(b))
+    # Chama a função para ler os dados do arquivo de entrada
+    ler_arquivo()
 
-with open('output.txt', 'w') as arquivo_saida:
-    arquivo_saida.write(f'Valor da Integral Aproximada:\n')
-    arquivo_saida.write(f'I = {I}\n')
+    # Calcula a integral pelo método do trapézio simples e escreve no arquivo de saída
+    arquivo_saida.write("Valor da Integral Aproximada: \nI ~= " + str(trapezio_simples(limite_inferior, limite_superior, funcao)))
+    
+    # Fecha os arquivos
+    arquivo_entrada.close()	
+    arquivo_saida.close()
+
+# Chama a função principal
+main()

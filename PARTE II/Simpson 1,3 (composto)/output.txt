@@ -1,2 +1,2 @@
-Valor da Integral Aproximada:
-I = 0.756948979798717
+Valor da Integral Aproximada: 
+I = 0.756948979798717 

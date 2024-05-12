@@ -1,2 +1,1 @@
-Polinomio Interpolador:
-(0.6695904 - 0.0518730999999999*x)*(x - 1.0)
+Polinômio Interpolador: x*(1.0 - 0.04*x) 

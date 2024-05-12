@@ -1,30 +1,64 @@
-# Bibliotecas utilizadas
-import sympy as simp
+from sympy import *
 
-# Criação da lista que receberá os dados do arquivo
-Dados_do_arquivo = []
+# Define a variável simbólica x
+x = symbols('x')
 
-# Leitura do arquivo e separação das linhas em índices da lista
-with open('input.txt', 'r') as file:
-    for line in file:
-        Dados_do_arquivo.append(line.strip())
+# Abre o arquivo de entrada para leitura e o arquivo de saída para escrita
+entrada_arquivo = open('input.txt', 'r')
+saida_arquivo = open('output.txt', 'w')
 
-# Separação dos dados em variáveis com nomes mais significativos
-a = float(Dados_do_arquivo[0])
-b = float(Dados_do_arquivo[1])
+def ler_arquivo():
+    global entrada_arquivo, funcao, a, b, n
+    
+    # Lê a função e os limites de integração do arquivo
+    funcao = eval(entrada_arquivo.readline())
+    a = float(entrada_arquivo.readline())
+    b = float(entrada_arquivo.readline())
+    
+    # Verifica se a próxima linha não está vazia antes de tentar convertê-la para inteiro
+    linha = entrada_arquivo.readline().strip()
+    if linha:
+        n = int(linha)
+    else:
+        # Se a linha estiver vazia, defina n como 1
+        n = 1
 
-# Declaração da função
-def f(x):
-    return simp.sympify(Dados_do_arquivo[2]).subs({"x": x}).evalf()
+def calcular_intervalos(inicio, fim, h):
+    intervalos = [inicio]
+    aux = inicio + h
+ 
+    while True:
+        if aux >= fim:
+            break
+        aux = round(aux, 2)
+        intervalos.append(aux)
+        aux += h
+    intervalos.append(aux)
+    
+    return intervalos
 
-# Largura do intervalo
-h = (b - a)/2
+def metodo_simpson_1_3(funcao, a, b, n):
+    h = (b - a) / (2 * n)
+    intervalos = calcular_intervalos(a, b, h)
+    I = funcao.subs(x, a) + funcao.subs(x, b)
 
-# Aplica o Método de Simpson 1/3 simples
-I = (h / 3) * (f(a) + 4 * f((a + b) / 2) + f(b))
+    for i in range(1, len(intervalos) - 1):
+        valor = funcao.subs(x, intervalos[i])
+        if i % 2 == 0:
+            I += 2 * valor
+        elif i % 2 != 0:
+            I += 4 * valor
+    I *= h / 3
+    
+    return round(I, 4)
 
-print(I)
+def main():
+    global saida_arquivo, funcao, a, b, n
 
-with open('output.txt', 'w') as arquivo_saida:
-    arquivo_saida.write(f'Valor da Integral Aproximada:\n')
-    arquivo_saida.write(f'I = {I}\n')
+    ler_arquivo()
+
+    saida_arquivo.write("Valor da Integral Aproximada:\nI ~= " + str(metodo_simpson_1_3(funcao, a, b, n)))
+    entrada_arquivo.close()	
+    saida_arquivo.close()
+
+main()

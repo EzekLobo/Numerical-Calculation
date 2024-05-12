@@ -1,23 +1,40 @@
-import sympy as simp
+from math import *
 
-# Leitura da função e do ponto onde a derivada será calculada a partir do arquivo input.txt
-Dados_do_arquivo = []
-with open('input.txt', 'r') as file:
-    for line in file:
-        Dados_do_arquivo.append(line.strip())
+# Abrir o arquivo de entrada para leitura e o arquivo de saída para escrita
+file_read = open('input.txt', 'r')
+file_result = open('output.txt', 'w')
 
-# Separa a função e o ponto onde a derivada será calculada
-funcao = simp.sympify(Dados_do_arquivo[0])
-x_i = float(Dados_do_arquivo[1])
+# Função para ler os dados do arquivo de entrada
+def read_file():
+    global file_read, function, x
 
-# Valor do incremento h (pode ser ajustado)
-h = 1e-5
+    # Ler a função e o valor de x do arquivo
+    function = file_read.readline()
+    x = float(file_read.readline())
+ 
+# Função para avaliar a função fornecida em um ponto específico
+def evaluate_function(x):
+    global function
+    return eval(function)
 
-# Cálculo da derivada usando a fórmula de diferença progressiva (forward difference)
-derivada = (funcao.subs({"x": x_i + h}) - funcao.subs({"x": x_i})) / h
+# Função para calcular a derivada de primeira ordem
+def first_derivative(x):
+    # Aplicar a fórmula da derivada de primeira ordem
+    return str((evaluate_function(x + 1) - evaluate_function(x - 1)) / ((x + 1) - (x - 1)))
 
-print(f"A derivada em x = {x_i} é aproximadamente: {derivada}")
+# Função principal
+def main():
+    global file_result, x
 
-with open('output.txt', 'w') as arquivo_saida:
-    arquivo_saida.write(f'Derivada Aproximada:\n')
-    arquivo_saida.write(f'Derivada em x = {x_i} sera aproximadamente: {derivada}\n')
+    # Ler os dados do arquivo de entrada
+    read_file()
+
+    # Calcular a derivada de primeira ordem e escrever no arquivo de saída
+    file_result.write("Derivada de primeira ordem: \n" + first_derivative(x))
+    
+    # Fechar os arquivos
+    file_read.close()  
+    file_result.close()
+
+# Chamar a função principal
+main()

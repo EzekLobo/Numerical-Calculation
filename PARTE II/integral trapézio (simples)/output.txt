@@ -1,2 +1,2 @@
-Valor da Integral Aproximada:
-I = 0.427333333333333
+Valor da Integral Aproximada: 
+I ~= 2277649.1031817*pi
